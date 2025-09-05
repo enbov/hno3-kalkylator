@@ -15,9 +15,8 @@ The app is based on Perry/HandyMath data tables and uses:
 
 ## Usage
 1. Enter **Temperature (°C)**  
-2. Enter **Density (kg/L)** (comma or dot accepted)  
-3. Tap **Calculate**  
-4. The concentration (%) and status will be displayed
+2. Enter **Density (kg/L)** (comma or dot accepted)   
+3. The concentration (%) and status will be displayed
 
 ## Live version
 👉 [GitHub Pages link](https://enbov.github.io/hno3-kalkylator/)
