@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HNO₃ Concentration</title>
+<link id="fav" rel="icon" href="favicon-light.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F3B66">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+  :root {
+    --blue-900: #0F3B66;
+    --blue-800: #174975;
+    --blue-700: #1F4E79;
+    --blue-300: #C9D9F0;
+    --blue-200: #D9E1F2;
+    --blue-100: #EDF3FF;
+    --accent:   #2F6CAD;
+    --bg: #F7FAFF;
+    --card: #FFFFFF;
+    --text: #102235;
+    --trans: 150ms ease;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f141a;
+      --card: #18202a;
+      --text: #FFFFFF;
+      --blue-100: #233142;
+      --blue-200: #2b3a4e;
+      --blue-300: #3a4d67;
+    }
+  }
+  html[data-theme="light"] { --bg:#F7FAFF; --card:#FFFFFF; --text:#102235; }
+  html[data-theme="dark"]  { --bg:#0f141a; --card:#18202a; --text:#FFFFFF; }
+
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); transition: background-color var(--trans), color var(--trans); }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 16px; }
+  .topbar {
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 10px 14px; background: linear-gradient(90deg, var(--blue-200), var(--card));
+    border-radius: 14px; margin: 12px 0; transition: background var(--trans), color var(--trans);
+  }
+  .brand { display:flex; align-items:center; gap:8px; font-weight:800; color: var(--text); font-size: 18px; }
+  .icons-right { display:flex; align-items:center; gap:8px; }
+  .icon-btn, .theme-btn { display:inline-flex; align-items:center; justify-content:center; height:36px; border-radius:10px; border:2px solid var(--blue-300); background: rgba(255,255,255,.6); color: var(--text); transition: background-color var(--trans), color var(--trans), border-color var(--trans), opacity var(--trans); }
+  .icon-btn { width:36px; }
+  .theme-btn { padding: 0 10px; font-weight:700; min-width:68px; }
+  @media (prefers-color-scheme: dark) { .icon-btn, .theme-btn { background: rgba(255,255,255,.12); } }
+  .icon-btn:hover, .theme-btn:hover { filter: brightness(1.05); }
+  .card { background: var(--card); border-radius: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); padding: 16px; margin-top: 14px; transition: background-color var(--trans), color var(--trans); }
+  label { display:block; font-weight:700; color: var(--text); margin-bottom:8px; transition: color var(--trans); }
+  input[type=number], input[type=text] { width: 100%; font-size:20px; padding:14px 12px; border:2px solid var(--blue-300); border-radius:12px; color: var(--text); transition: background-color var(--trans), color var(--trans), border-color var(--trans); }
+  @media (prefers-color-scheme: dark) { input[type=number], input[type=text] { background:#0d1319; border-color: var(--blue-300); } }
+  .row { display:grid; grid-template-columns:1fr; gap:14px; }
+  .hint { font-size:13px; color:#789; transition: color var(--trans); }
+  .result { display:flex; align-items:center; justify-content: space-between; font-size:22px; font-weight:800; color: var(--blue-900);
+            padding: 12px 14px; border:2px solid var(--blue-300); border-radius:12px; background: var(--blue-100); transition: background-color var(--trans), color var(--trans), border-color var(--trans); }
+  @media (prefers-color-scheme: dark) { .result { color: var(--text); background:#121a22; border-color: var(--blue-300); } }
+  footer { margin: 28px 0 8px; text-align:center; font-size:12px; color:#567; display:flex; align-items:center; justify-content:center; gap:8px; transition: color var(--trans); }
+  @media (prefers-color-scheme: dark) { footer { color:#9ab; } }
+  .footer-icon-img { width:22px; height:22px; opacity:.8; border-radius:6px; }
+
+  .logo-dark { display:none; }
+  .logo-light { display:inline; }
+  @media (prefers-color-scheme: dark) {
+    .logo-dark { display:inline; }
+    .logo-light { display:none; }
+  }
+  html[data-theme="light"] .logo-light { display:inline; }
+  html[data-theme="light"] .logo-dark  { display:none; }
+  html[data-theme="dark"]  .logo-light { display:none; }
+  html[data-theme="dark"]  .logo-dark  { display:inline; }
+
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); display:none; }
+  .modal { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--card); color: var(--text); width: min(680px, 92vw); max-height: 80vh; overflow:auto; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.4); display:none; transition: background-color var(--trans), color var(--trans); }
+  @media (prefers-color-scheme: dark) { .modal { background:#ffffff; color:#0f141a; } .modal header { border-color: #e5e7eb; } }
+  .modal header { padding: 14px 16px; border-bottom: 1px solid var(--blue-300); display:flex; align-items:center; justify-content: space-between; }
+  .modal .content { padding: 14px 16px; }
+  .credits { margin-top: 14px; font-size: 14px; line-height: 1.35; color: #666; }
+  @media (prefers-color-scheme: dark) { .credits { color: #bbb; } }
+  .close-btn { background: transparent; border: none; font-size: 20px; padding: 6px 10px; color: inherit; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <img src="logo_light.png" width="32" height="32" alt="bov icon" class="logo-light">
+        <img src="logo_dark.png" width="32" height="32" alt="bov icon" class="logo-dark">
+        <span>HNO₃ Concentration</span>
+      </div>
+      <div class="icons-right">
+        <button class="icon-btn" id="aboutOpen" title="About" aria-label="About">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </button>
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">Dark</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="temp">Temperature (°C)</label>
+          <input id="temp" type="number" inputmode="decimal" step="0.1" placeholder="Insert temperature">
+          <div class="hint" id="rangeHint">Valid range: (loading…)</div>
+        </div>
+        <div>
+          <label for="rho">Density (kg/L)</label>
+          <input id="rho" type="text" inputmode="decimal" pattern="[0-9,.]*" placeholder="Insert density (e.g. 1,345 or 1.345)">
+          <div class="hint">Comma or dot — both work</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="result">
+        <div>Concentration</div>
+        <div><span id="conc">–</span> <span style="font-weight:600;">%</span></div>
+      </div>
+      <div id="status" class="hint" style="margin-top:10px;"></div>
+    </div>
+
+    <footer>
+      <img src="logo_light.png" alt="bov logo" class="footer-icon-img logo-light">
+      <img src="logo_dark.png" alt="bov logo" class="footer-icon-img logo-dark">
+      <span>Created by bov · 2025</span>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="backdrop"></div>
+  <div class="modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <header>
+      <strong id="aboutTitle">About this tool</strong>
+      <button class="close-btn" id="aboutClose" aria-label="Close">✕</button>
+    </header>
+    <div class="content">
+      <h1>HNO₃ Concentration Calculator</h1>
+      <p>Calculate nitric acid (HNO₃) concentration (%) from <strong>temperature (°C)</strong> and <strong>density (kg/L)</strong>.</p>
+      <ul>
+        <li>Interpolates in temperature</li>
+        <li>Inverts to concentration using two-nearest points</li>
+      </ul>
+      <p><strong>Features</strong>: Mobile-friendly, dark mode, auto-calc, rounds to 1 decimal.</p>
+      <p><strong>Usage</strong>: Enter Temperature (°C) and Density (kg/L). Comma or dot are both accepted.</p>
+      <div class="credits">
+        <div>Data source: Perry’s Chemical Engineers’ Handbook</div>
+        <div>Credits: Created by bov</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+fetch('data.json').then(r=>r.json()).then(DATA=>{
+  window.HNO3_DATA = DATA;
+  document.getElementById('rangeHint').textContent = `Valid range: ${DATA.temps[0]}–${DATA.temps[DATA.temps.length-1]} °C`;
+
+  const parseNum = x => { if (!x) return NaN; x = (''+x).trim().replace(',', '.'); return parseFloat(x); };
+  function rhoAtT(T) {
+    const ts = DATA.temps;
+    if (T < ts[0] || T > ts[ts.length-1]) return null;
+    let i=0; while (i+1<ts.length && ts[i+1] <= T) i++;
+    const out = [];
+    for (let r=0;r<DATA.concs.length;r++) {
+      const r1 = DATA.rho_grid[r][i], r2 = DATA.rho_grid[r][i+1];
+      if (r1==null || r2==null) { out.push(null); continue; }
+      const y = r1 + (T-ts[i])*(r2-r1)/(ts[i+1]-ts[i]);
+      out.push(y);
+    }
+    return out;
+  }
+  function concFromTRho(T,R) {
+    const arr = rhoAtT(T); if (!arr) return {status:'outT', conc:null};
+    const diffs = []; for (let i=0;i<arr.length;i++) { const v = arr[i]; if (v==null || isNaN(v)) continue; diffs.push([Math.abs(v-R), i]); }
+    if (diffs.length < 2) return {status:'few', conc:null};
+    diffs.sort((a,b)=>a[0]-b[0]);
+    const i1=diffs[0][1], i2=diffs[1][1];
+    const R1=arr[i1], R2=arr[i2];
+    const C1=DATA.concs[i1], C2=DATA.concs[i2];
+    const C = (R2===R1) ? C1 : (C1 + (R - R1)*(C2 - C1)/(R2 - R1));
+    return {status:'ok', conc:C};
+  }
+  const round1 = x => Math.round(x*10)/10;
+  const fmt1 = x => x.toLocaleString('en-US', {minimumFractionDigits:1, maximumFractionDigits:1});
+
+  function calculate() {
+    const T = parseNum(document.getElementById('temp').value);
+    const R = parseNum(document.getElementById('rho').value);
+    const out = document.getElementById('conc');
+    const st = document.getElementById('status');
+    if (isNaN(T) || isNaN(R)) { out.textContent='–'; st.textContent='Enter temperature and density.'; return; }
+    const ans = concFromTRho(T,R);
+    if (!ans || ans.conc==null) { out.textContent='–'; st.textContent = (ans && ans.status==='outT') ? 'Outside temperature range' : 'Too few values around this temperature'; }
+    else { out.textContent = fmt1(round1(ans.conc)); st.textContent='OK'; }
+  }
+  ['temp','rho'].forEach(id=>{ const el=document.getElementById(id); el.addEventListener('input', calculate); el.addEventListener('keyup', e=>{ if(e.key==='Enter') calculate(); }); });
+});
+
+// About modal
+const modal = document.getElementById('aboutModal');
+const backdrop = document.getElementById('backdrop');
+document.getElementById('aboutOpen').addEventListener('click', ()=>{ modal.style.display='block'; backdrop.style.display='block'; });
+document.getElementById('aboutClose').addEventListener('click', ()=>{ modal.style.display='none'; backdrop.style.display='none'; });
+backdrop.addEventListener('click', ()=>{ modal.style.display='none'; backdrop.style.display='none'; });
+
+// Theme handling (single toggle button)
+const root = document.documentElement;
+const fav = document.getElementById('fav');
+const btn = document.getElementById('themeToggle');
+
+function applyTheme(mode) {
+  if (mode === 'dark') {
+    root.setAttribute('data-theme','dark');
+    btn.textContent = 'Light';
+    fav.href = 'favicon-dark.ico';
+  } else if (mode === 'light') {
+    root.setAttribute('data-theme','light');
+    btn.textContent = 'Dark';
+    fav.href = 'favicon-light.ico';
+  } else {
+    root.removeAttribute('data-theme');
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    btn.textContent = isDark ? 'Light' : 'Dark';
+    fav.href = isDark ? 'favicon-dark.ico' : 'favicon-light.ico';
+  }
+}
+
+function getInitialMode() {
+  const saved = localStorage.getItem('themeMode');
+  if (saved === 'light' || saved === 'dark') return saved;
+  return null;
+}
+
+applyTheme(getInitialMode());
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!localStorage.getItem('themeMode')) applyTheme(null);
+});
+
+btn.addEventListener('click', () => {
+  const current = root.getAttribute('data-theme');
+  if (current === 'dark') {
+    localStorage.setItem('themeMode','light');
+    applyTheme('light');
+  } else if (current === 'light') {
+    localStorage.setItem('themeMode','dark');
+    applyTheme('dark');
+  } else {
+    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const target = isDark ? 'light' : 'dark';
+    localStorage.setItem('themeMode', target);
+    applyTheme(target);
+  }
+});
+</script>
+</body>
+</html>
